@@ -37,6 +37,7 @@ public class MjpegView extends View{
     private String url;
     private Bitmap lastBitmap;
     private MjpegDownloader downloader;
+    private OnLoadCallbacks callbacks;
 
     private Paint paint;
     private Rect dst;
@@ -69,6 +70,10 @@ public class MjpegView extends View{
         dst = new Rect(0,0,0,0);
     }
 
+    public void setCallbacks(OnLoadCallbacks callbacks) {
+        this.callbacks = callbacks;
+    }
+
     public void setUrl(String url){
         this.url = url;
     }
@@ -97,6 +102,9 @@ public class MjpegView extends View{
 
     public void setBitmap(Bitmap bm){
         Log.v(tag,"New frame");
+        if (callbacks != null) {
+            callbacks.onLoadOkCallback();
+        }
         if(lastBitmap != null && ((isUserForceConfigRecycle && isRecycleBitmap) || (!isUserForceConfigRecycle && Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB))){
             Log.v(tag,"Manually recycle bitmap");
             lastBitmap.recycle();
@@ -376,6 +384,9 @@ public class MjpegView extends View{
                     bis.close();
                     connection.disconnect();
                     Log.i(tag,"disconnected with " + url);
+                    if (callbacks != null) {
+                        callbacks.onLoadErrorCallback();
+                    }
                 } catch (Exception e) {
                     Log.e(tag, e.getMessage());
                 }
@@ -406,5 +417,14 @@ public class MjpegView extends View{
         private void newFrame(Bitmap bitmap){
             setBitmap(bitmap);
         }
+    }
+
+    //
+    // INNER CLASS
+    //
+
+    public interface OnLoadCallbacks {
+        void onLoadErrorCallback();
+        void onLoadOkCallback();
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.longdo.mjpegviewer.MjpegView;
 
@@ -25,6 +26,17 @@ public class MainActivity extends AppCompatActivity {
         //view.setMsecWaitAfterReadImageError(1000);
         view1.setUrl("http://bma-itic1.iticfoundation.org/mjpeg2.php?camid=61.91.182.114:1111");
         view1.setRecycleBitmap(true);
+        view1.setCallbacks(new MjpegView.OnLoadCallbacks() {
+            @Override
+            public void onLoadErrorCallback() {
+                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLoadOkCallback() {
+                Toast.makeText(MainActivity.this, "Ok", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         view2 = (MjpegView) findViewById(R.id.mjpegview2);
         view2.setAdjustHeight(true);
@@ -32,6 +44,17 @@ public class MainActivity extends AppCompatActivity {
         view2.setMode(MjpegView.MODE_FIT_WIDTH);
         //view.setMsecWaitAfterReadImageError(1000);
         view2.setUrl("http://bma-itic1.iticfoundation.org/mjpeg2.php?camid=61.91.182.114:1112");
+        view2.setCallbacks(new MjpegView.OnLoadCallbacks() {
+            @Override
+            public void onLoadErrorCallback() {
+                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLoadOkCallback() {
+                Toast.makeText(MainActivity.this, "Ok", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
