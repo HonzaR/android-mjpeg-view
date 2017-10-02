@@ -388,7 +388,9 @@ public class MjpegView extends View{
                         callbacks.onLoadErrorCallback();
                     }
                 } catch (Exception e) {
-                    Log.e(tag, e.getMessage());
+                    String msg = e.getMessage();
+                    if (msg == null) msg = "MjpegView error close/disconnect"; // Fix for https://fabric.io/apps-dev-team/android/apps/com.tk.ibb.izmirtrafik/issues/594aa99dbe077a4dcc6ea417?time=last-ninety-days
+                    Log.e(tag, msg);
                 }
 
                 if(msecWaitAfterReadImageError > 0) {
